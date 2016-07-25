@@ -1,4 +1,4 @@
-FROM resin/beaglebone-green-wifi-alpine-python:3.5
+FROM resin/beaglebone-green-wifi-alpine-python:2.7
 
 MAINTAINER Gergely Imreh <gergely@resin.io>
 
@@ -14,8 +14,7 @@ RUN apk add \
      i2c-tools \
      linux-headers \
     --no-cache --allow-untrusted \
-    --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ \
-    && apk del py-setuptools
+    --repository http://dl-3.alpinelinux.org/alpine/edge/testing/
 
 # Copy requirements.txt first for better cache on later pushes
 COPY ./requirements.txt /requirements.txt
