@@ -1,5 +1,5 @@
 smbus-cffi==0.5.1
-#-e git+https://github.com/imrehg/Adafruit_Python_PureIO.git@ez_setup#egg=adafruit-pureio
-#-e git+https://github.com/imrehg/Adafruit_Python_GPIO.git@ez_setup#egg=adafruit-gpio
+-e git+https://github.com/imrehg/Adafruit_Python_PureIO.git@ez_setup#egg=adafruit-pureio
+-e git+https://github.com/imrehg/Adafruit_Python_GPIO.git@ez_setup#egg=adafruit-gpio
 -e git+https://github.com/adafruit/Adafruit_Python_BMP#egg=adafruit-bmp
 -e git+https://github.com/imrehg/adafruit-beaglebone-io-python.git#egg=adafruit-bbio

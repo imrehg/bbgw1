@@ -1,4 +1,4 @@
-FROM resin/beaglebone-green-wifi-alpine-python:2.7
+FROM resin/beaglebone-green-wifi-alpine-python:3.5
 
 MAINTAINER Gergely Imreh <gergely@resin.io>
 
@@ -21,7 +21,7 @@ COPY ./requirements.txt /requirements.txt
 
 # pip install python deps from requirements.txt on the resin.io build server
 # Need to upgrade setuptools, and that might have some spurious errors on upgrage
-# RUN pip install -U setuptools || \
+RUN pip install -U setuptools || pip install -U setuptools
 RUN pip install -r /requirements.txt
 
 # This will copy all files in our root to the working  directory in the container
