@@ -14,7 +14,8 @@ RUN apk add \
      i2c-tools \
      linux-headers \
     --no-cache --allow-untrusted \
-    --repository http://dl-3.alpinelinux.org/alpine/edge/testing/
+    --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ \
+    && apk del py-setuptools
 
 # Copy requirements.txt first for better cache on later pushes
 COPY ./requirements.txt /requirements.txt
