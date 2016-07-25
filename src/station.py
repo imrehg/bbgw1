@@ -3,6 +3,8 @@
 import os
 import time
 
+from smbus import SMBus
+
 import Adafruit_BMP.BMP085 as BMP085   # Actually using it for BMP180 here
 import Adafruit_BBIO.GPIO as GPIO
 
@@ -41,7 +43,7 @@ if __name__ == "__main__":
     blinkshort = 0.05
     blinklong = 0.8
 
-    sensor = BMP085.BMP085(busnum=2, mode=BMP085.BMP085_ULTRAHIGHRES)
+    sensor = BMP085.BMP085(busnum=2, i2c_interface=SMBUS, mode=BMP085.BMP085_ULTRAHIGHRES)
 
     # Default is to monitor the temperature
     TEST_PRESSURE = True if os.getenv('TEST_PRESSURE', default='0') == '1' else False
