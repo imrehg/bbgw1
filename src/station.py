@@ -6,6 +6,8 @@ import time
 import Adafruit_BMP.BMP085 as BMP085   # Actually using it for BMP180 here
 import Adafruit_BBIO.GPIO as GPIO
 
+import grove_oled
+
 def blink(pin, blinktime=0.1):
     """ Blink a single LED
     """
@@ -30,6 +32,12 @@ if __name__ == "__main__":
     GPIO.setup(pin1, GPIO.OUT)
     GPIO.output(pin1, GPIO.LOW)
 
+    grove_oled.oled_init()
+    grove_oled.oled_clearDisplay()
+    grove_oled.oled_setNormalDisplay()
+    grove_oled.oled_setVerticalMode()
+    time.sleep(.1)
+
     blinkshort = 0.05
     blinklong = 0.8
 
@@ -40,8 +48,10 @@ if __name__ == "__main__":
 
     if TEST_PRESSURE:
         reading = sensor.read_pressure
+        printreading = '{} Pa'
     else:
         reading = sensor.read_temperature
+        printreading = '{:.1f} C'
 
     # Holt-Winters parameters
     alpha = 0.15
@@ -69,6 +79,7 @@ if __name__ == "__main__":
     if SENSOR_THRESHOLD < 0:
         SENSOR_THRESHOLD = 1.0
 
+    trend = ''
     while True:
         time.sleep(PERIOD - blinktime)
         x = reading()
@@ -80,7 +91,14 @@ if __name__ == "__main__":
         blinktime = blinklong if abs(b) >= SENSOR_THRESHOLD / 60.0 * PERIOD else blinkshort
         if abs(b) < 0.001:
             blinks([pin0, pin1], blinktime)
+            trend += '-'
         elif b < 0:
             blink(pin0, blinktime)
+            trend += '\\'
         else:
             blink(pin1, blinktime)
+            trend += '/'
+        if len(trend) > 12:
+            trend = trend[-12:]
+        grove_oled.oled_setTextXY(0,0)
+        grove_oled.oled_putString(printreading.format(x))

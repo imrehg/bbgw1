@@ -1,4 +1,6 @@
-FROM resin/beaglebone-python:latest
+FROM resin/beaglebone-green-wifi-alpine-python:2.7
+
+MAINTAINER Gergely Imreh <gergely@resin.io>
 
 ENV INITSYSTEM on
 
@@ -6,9 +8,13 @@ ENV INITSYSTEM on
 WORKDIR /usr/src/app
 
 # Add dependencies
-RUN apt-get update && \
-    apt-get install -yq --no-install-recommends git build-essential python-smbus && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apk add \
+     git \
+     build-base \
+     i2c-tools \
+     linux-headers \
+    --no-cache --allow-untrusted \
+    --repository http://dl-3.alpinelinux.org/alpine/edge/testing/
 
 # Copy requirements.txt first for better cache on later pushes
 COPY ./requirements.txt /requirements.txt
@@ -16,11 +22,11 @@ COPY ./requirements.txt /requirements.txt
 # pip install python deps from requirements.txt on the resin.io build server
 RUN pip install -r /requirements.txt
 
-# Remove build dependencies
-RUN apt-get purge git build-essential
+RUN apk del \
+      linux-headers
 
 # This will copy all files in our root to the working  directory in the container
 COPY . ./
 
 # main.py will run when container starts up on the device
-CMD ["python","src/station.py"]
+CMD ["/usr/local/bin/python", "src/station.py"]
