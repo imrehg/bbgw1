@@ -3,6 +3,7 @@
 import os
 import time
 
+import artikcloud
 from smbus import SMBus
 
 import Adafruit_BMP.BMP085 as BMP085   # Actually using it for BMP180 here
