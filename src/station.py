@@ -43,7 +43,7 @@ if __name__ == "__main__":
     blinkshort = 0.05
     blinklong = 0.8
 
-    sensor = BMP085.BMP085(busnum=2, i2c_interface=SMBUS, mode=BMP085.BMP085_ULTRAHIGHRES)
+    sensor = BMP085.BMP085(busnum=2, i2c_interface=SMBus, mode=BMP085.BMP085_ULTRAHIGHRES)
 
     # ARTIK Cloud setup
     api_client = artikcloud.ApiClient()
