@@ -45,6 +45,16 @@ if __name__ == "__main__":
 
     sensor = BMP085.BMP085(busnum=2, i2c_interface=SMBUS, mode=BMP085.BMP085_ULTRAHIGHRES)
 
+    # ARTIK Cloud setup
+    api_client = artikcloud.ApiClient()
+    DEVICE_ID = os.getenv('ARTIKCLOUD_DEVICE_ID')
+    DEVICE_TOKEN = os.getenv('ARTIKCLOUD_DEVICE_TOKEN')
+    api_client.set_default_header(header_name="Authorization", header_value="Bearer {}".format(DEVICE_TOKEN))
+    messages_api = artikcloud.MessagesApi(api_client)
+    message = artikcloud.MessageAction()
+    message.type = "message"
+    message.sdid = "{}".format(DEVICE_ID)
+
     # Default is to monitor the temperature
     TEST_PRESSURE = True if os.getenv('TEST_PRESSURE', default='0') == '1' else False
 
@@ -81,6 +91,7 @@ if __name__ == "__main__":
     if SENSOR_THRESHOLD < 0:
         SENSOR_THRESHOLD = 1.0
 
+    i = 0
     trend = ''
     while True:
         time.sleep(PERIOD - blinktime)
@@ -104,3 +115,9 @@ if __name__ == "__main__":
             trend = trend[-12:]
         grove_oled.oled_setTextXY(0,0)
         grove_oled.oled_putString(printreading.format(x))
+        message.ts = int(round(time.time() * 1000))
+        message.data = {'Temperature': x}
+        if i % 120 == 0:
+            response = messages_api.send_message_action(message)
+            print(response)
+        i += 1
