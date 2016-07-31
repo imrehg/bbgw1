@@ -118,7 +118,10 @@ if __name__ == "__main__":
         grove_oled.oled_putString(printreading.format(x))
         message.ts = int(round(time.time() * 1000))
         message.data = {'Temperature': x}
-        if i % 120 == 0:
-            response = messages_api.send_message_action(message)
-            print(response)
+        if i % 600 == 0:
+            try:
+                response = messages_api.send_message_action(message)
+                print(response)
+            except:
+                print("Error sending message to ARTIK Cloud")
         i += 1
