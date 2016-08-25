@@ -117,7 +117,7 @@ if __name__ == "__main__":
         grove_oled.oled_setTextXY(0,0)
         grove_oled.oled_putString(printreading.format(x))
         grove_oled.oled_setTextXY(0,1)
-        grove_oled.oled_putString(Location:)
+        grove_oled.oled_putString("Location:")
         grove_oled.oled_setTextXY(0,2)
         grove_oled.oled_putString(os.getenv("LOCATION", "unknown"))
         message.ts = int(round(time.time() * 1000))
