@@ -1,4 +1,4 @@
-FROM resin/beaglebone-green-wifi-alpine-python:3.5
+FROM resin/%%RESIN_MACHINE_NAME%%-alpine-python:3.5
 
 MAINTAINER Gergely Imreh <gergely@resin.io>
 
