@@ -87,6 +87,13 @@ if __name__ == "__main__":
         PERIOD = 1
 
     try:
+        SENDPERIOD = int(os.getenv('SENDPERIOD', default='600'))
+    except ValueError:
+        SENDPERIOD = 600
+    if SENDPERIOD < 1:
+        SENDPERIOD = 1
+
+    try:
         # different display trashhold, in units of X unit/min, above which do long blink
         SENSOR_THRESHOLD = float(os.getenv('SENSOR_THRESHOLD', default='1.0'))
     except ValueError:
@@ -126,7 +133,7 @@ if __name__ == "__main__":
         grove_oled.oled_putString(os.getenv("LOCATION", "unknown"))
         message.ts = int(round(time.time() * 1000))
         message.data = {'Temperature': x}
-        if i % 600 == 0:
+        if i % SENDPERIOD == 0:
             try:
                 response = messages_api.send_message(message)
                 print(response)

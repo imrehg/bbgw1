@@ -22,4 +22,5 @@ application are the following:
 
 * `TEST_PRESSURE`, default is `0`, if equal to `1` then pressure value is tested, otherwise temperature
 * `PERIOD`, default is `1`, the time between sensor readings in seconds, integer
+* `SENDPERIOD`, default is `600`, the number of reading periods between sending data to the ARTIK Cloud, integer
 * `SENSOR_THRESHOLD`, default is `1.0`, the change/1min in sensor value which triggers long blink of the LEDs
