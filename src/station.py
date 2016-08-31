@@ -4,6 +4,7 @@ import os
 import time
 
 import artikcloud
+from artikcloud.rest import ApiException
 from smbus import SMBus
 
 import Adafruit_BMP.BMP085 as BMP085   # Actually using it for BMP180 here
@@ -50,9 +51,11 @@ if __name__ == "__main__":
     api_client = artikcloud.ApiClient()
     DEVICE_ID = os.getenv('ARTIKCLOUD_DEVICE_ID')
     DEVICE_TOKEN = os.getenv('ARTIKCLOUD_DEVICE_TOKEN')
-    api_client.set_default_header(header_name="Authorization", header_value="Bearer {}".format(DEVICE_TOKEN))
-    messages_api = artikcloud.MessagesApi(api_client)
-    message = artikcloud.MessageAction()
+    # Setting up ARTIK Cloud connection
+    artikcloud.configuration.access_token = DEVICE_TOKEN
+    # Setting up messaging
+    messages_api = artikcloud.MessagesApi()
+    message = artikcloud.Message()
     message.type = "message"
     message.sdid = "{}".format(DEVICE_ID)
 
@@ -125,9 +128,9 @@ if __name__ == "__main__":
         message.data = {'Temperature': x}
         if i % 600 == 0:
             try:
-                response = messages_api.send_message_action(message)
+                response = messages_api.send_message(message)
                 print(response)
-            except:
+            except ApiException:
                 print("Error sending message to ARTIK Cloud")
         i += 1
         # Wait until the new period starts
