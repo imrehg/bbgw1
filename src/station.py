@@ -74,7 +74,6 @@ if __name__ == "__main__":
     x = reading()
     a = x
     b = 0
-    blinktime = blinkshort
     print("{},{},{}".format(x, a, b))
 
     try:
@@ -95,7 +94,7 @@ if __name__ == "__main__":
     i = 0
     trend = ''
     while True:
-        time.sleep(PERIOD - blinktime)
+        loopstart = time.time()
         x = reading()
         aold, bold = a, b
         a = alpha * x + (1 - alpha) * (aold + bold)
@@ -114,11 +113,13 @@ if __name__ == "__main__":
             trend += '/'
         if len(trend) > 12:
             trend = trend[-12:]
-        grove_oled.oled_setTextXY(0,0)
+        grove_oled.oled_setTextXY(0, 0)
         grove_oled.oled_putString(printreading.format(x))
-        grove_oled.oled_setTextXY(1,0)
+        grove_oled.oled_setTextXY(1, 0)
+        grove_oled.oled_putString(trend)
+        grove_oled.oled_setTextXY(2, 0)
         grove_oled.oled_putString("Location:")
-        grove_oled.oled_setTextXY(2,0)
+        grove_oled.oled_setTextXY(3, 0)
         grove_oled.oled_putString(os.getenv("LOCATION", "unknown"))
         message.ts = int(round(time.time() * 1000))
         message.data = {'Temperature': x}
@@ -129,3 +130,6 @@ if __name__ == "__main__":
             except:
                 print("Error sending message to ARTIK Cloud")
         i += 1
+        # Wait until the new period starts
+        newsleep = loopstart + PERIOD - time.time()
+        time.sleep(newsleep)
