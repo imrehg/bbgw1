@@ -134,5 +134,8 @@ if __name__ == "__main__":
                 print("Error sending message to ARTIK Cloud")
         i += 1
         # Wait until the new period starts
-        newsleep = loopstart + PERIOD - time.time()
-        time.sleep(newsleep)
+        newsleep = (loopstart + PERIOD) - time.time()
+        if (newsleep < 0) :
+            print("WARNING: loop took {}s while period is {}!".format(PERIOD - newsleep, PERIOD))
+        else:
+            time.sleep(newsleep)
