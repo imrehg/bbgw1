@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
     try:
         # different display trashhold, in units of X unit/min, above which do long blink
-        SENSOR_THRESHOLD = float(os.getenv('PERIOD', default='1.0'))
+        SENSOR_THRESHOLD = float(os.getenv('SENSOR_THRESHOLD', default='1.0'))
     except ValueError:
         SENSOR_THRESHOLD = 1.0
     if SENSOR_THRESHOLD < 0:
