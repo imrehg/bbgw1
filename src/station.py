@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os
+import sys
 import time
 
 import artikcloud
@@ -139,6 +140,8 @@ if __name__ == "__main__":
                 print(response)
             except ApiException:
                 print("Error sending message to ARTIK Cloud")
+            except:
+                print("Unexpected error:{}".format(sys.exc_info()[0]))
         i += 1
         # Wait until the new period starts
         newsleep = (loopstart + PERIOD) - time.time()
