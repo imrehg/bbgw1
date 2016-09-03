@@ -138,8 +138,8 @@ if __name__ == "__main__":
             try:
                 response = messages_api.send_message(message)
                 print(response)
-            except ApiException:
-                print("Error sending message to ARTIK Cloud")
+            except ApiException as e:
+                print("Error sending message to ARTIK Cloud:{}".format(str(e)))
             except:
                 print("Unexpected error:{}".format(sys.exc_info()[0]))
         i += 1
