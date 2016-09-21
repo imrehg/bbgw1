@@ -6,3 +6,5 @@ smbus-cffi==0.5.1
 -e git+https://github.com/imrehg/adafruit-beaglebone-io-python.git#egg=adafruit-bbio
 artikcloud==2.0.5
 #-e git+https://github.com/artikcloud/artikcloud-python.git#egg=artikcloud
+## For app restart via the Supervisor
+requests==2.11.1

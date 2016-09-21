@@ -11,6 +11,8 @@ from smbus import SMBus
 import Adafruit_BMP.BMP085 as BMP085   # Actually using it for BMP180 here
 import Adafruit_BBIO.GPIO as GPIO
 
+import requests
+
 import grove_oled
 
 def blink(pin, blinktime=0.1):
@@ -26,6 +28,17 @@ def blinks(pins, blinktime=0.1):
     time.sleep(blinktime)
     for pin in pins:
         GPIO.output(pin, GPIO.LOW)
+
+def restart_app():
+    """Restart application through the resin Supervisor
+    """
+    params = {'apikey': os.getenv('RESIN_SUPERVISOR_API_KEY')}
+    payload = {'appId': os.getenv('RESIN_APP_ID')}
+    supervisor_address = os.getenv('RESIN_SUPERVISOR_ADDRESS')
+    print("Restarting Application")
+    r = requests.post("{}/v1/restart".format(supervisor_address), supervisor_address, params=params, json=payload)
+    if (r.status_code == 200):
+        sys.exit(0)
 
 if __name__ == "__main__":
     # Set up GPIO pins
@@ -103,6 +116,7 @@ if __name__ == "__main__":
         SENSOR_THRESHOLD = 1.0
 
     i = 0
+    error_count = 0
     trend = ''
     while True:
         loopstart = time.time()
@@ -140,8 +154,13 @@ if __name__ == "__main__":
                 print(response)
             except ApiException as e:
                 print("Error sending message to ARTIK Cloud:{}".format(str(e)))
+                error_count += 1
             except:
                 print("Unexpected error:{}".format(sys.exc_info()[0]))
+                error_count += 1
+            finally:
+                if (error_count >= 3):
+                    restart_app()
         i += 1
         # Wait until the new period starts
         newsleep = (loopstart + PERIOD) - time.time()
